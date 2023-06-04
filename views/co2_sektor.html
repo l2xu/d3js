@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/javascript/d3.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+
+
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <title>D3 Bar Chart</title>
+</head>
+
+<body>
+    <header>
+        <a href="/">
+            <h1>Nachhaltigkeit: Umwelteinfluss von Fleisch</h1>
+        </a>
+        <div id="menu"><a href="/co2_sektor">Co2 Emissionen nach Sektor</a><a href="/co2_product">Co2 Emissionen nach
+                Produkt</a><a href="/produce_meat">Produce Meat</a><a href="#">Slide4</a></div>
+    </header>
+    <main>
+        <h1>Globale Co2 Emissionen nach Sektor im Jahr 2014</h1>
+        <div class="two_col">
+            <svg id="sankeyDiagram" width="1500" height="800"></svg>
+
+            <div id="showvalue">
+
+
+            </div>
+        </div>
+
+
+    </main>
+    <script src="/javascript/sankey.js"></script>
+</body>
+
+</html>

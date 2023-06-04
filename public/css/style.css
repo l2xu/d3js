@@ -1,0 +1,48 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5rem;
+  border: 1px solid darkgray;
+  padding: 10px 20px;
+  border-radius: 10px;
+}
+
+h1 {
+  font-weight: bold;
+}
+
+body {
+  padding: 20px;
+  background-color: rgb(240, 234, 225);
+  color: rgb(31, 31, 31);
+  font-family: monospace;
+}
+
+#menu {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+.two_col {
+  display: flex;
+  gap: 20px;
+}
+
+.two_col > div {
+  border: 1px solid darkgray;
+  padding: 10px 20px;
+  border-radius: 10px;
+  flex: 1;
+}
+
+#interact {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+#total {
+  font-size: large;
+  font-weight: bold;
+}

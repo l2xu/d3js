@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="/javascript/d3.js"></script>
+
+
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <title>Produce Meat</title>
+</head>
+
+<body>
+    <header>
+        <a href="/">
+            <h1>Nachhaltigkeit: Umwelteinfluss von Fleisch</h1>
+        </a>
+        <div id="menu"><a href="/co2_sektor">Co2 Emissionen nach Sektor</a><a href="/co2_product">Co2 Emissionen nach
+                Produkt</a><a href="/produce_meat">Produce Meat</a><a href="#">Slide4</a></div>
+    </header>
+    <main>
+        <h1>Fleischhertellung nach Land</h1>
+        <button onclick="update('SheepAndGoat')">Schafsfleisch</button>
+        <button onclick="update('BeefAndBuffalo')">Rindfleisch</button>
+        <button onclick="update('Pig')">Schweinefleisch</button>
+        <button onclick="update('Poultry')">Geflügelfleisch</button>
+        <button onclick="update('Total')">Insgesamt</button>
+        <div class="two_col">
+            <div id="d3">
+                <svg width="1500" height="800"></svg>
+            </div>
+
+            <div id="interact">
+
+
+            </div>
+        </div>
+
+
+    </main>
+    <script src="/javascript/produce_meat.js"></script>
+</body>
+
+</html>
