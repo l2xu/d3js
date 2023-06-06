@@ -46,3 +46,23 @@ body {
   font-size: large;
   font-weight: bold;
 }
+
+#interact {
+  border: none;
+  padding: 0 20px;
+}
+
+.interact-sub {
+  width: 100%;
+}
+
+.interact-box {
+  display: flex;
+  justify-content: space-between;
+}
+
+.outline {
+  border: 1px solid darkgray;
+  padding: 10px 20px;
+  border-radius: 10px;
+}

@@ -30,9 +30,9 @@ app.get("/produce_meat", (req, res) => {
   res.sendFile("/views/produce_meat.html", { root: __dirname });
 });
 
-app.get("/test", (req, res) => {
+app.get("/total_meat", (req, res) => {
   //send vies first.html file
-  res.sendFile("/views/test.html", { root: __dirname });
+  res.sendFile("/views/total_meat.html", { root: __dirname });
 });
 
 // Start the server on port 3000

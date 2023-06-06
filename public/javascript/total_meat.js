@@ -1,6 +1,6 @@
-const width = 500,
-  height = 500;
-margin = 100;
+const width = 1500,
+  height = 800;
+margin = 50;
 
 // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
 const radius = Math.min(width, height) / 2 - margin;
@@ -14,7 +14,7 @@ const svg = d3
   .append("g")
   .attr("transform", `translate(${width / 2},${height / 2})`);
 
-d3.json("/data/view1.json").then(function (data) {
+d3.json("/data/meat_production_world.json").then(function (data) {
   // set the color scale
   const color = d3
     .scaleOrdinal()
@@ -49,7 +49,8 @@ d3.json("/data/view1.json").then(function (data) {
     .attr("fill", (d) => color(d.data.label))
     .attr("stroke", "white")
     .style("stroke-width", "2px")
-    .style("opacity", 0.7);
+    .style("opacity", 0.7)
+    .on("mouseover", mouseOverFunction);
 
   // Add the polylines between chart and labels:
   svg
@@ -73,7 +74,7 @@ d3.json("/data/view1.json").then(function (data) {
     .selectAll("allLabels")
     .data(data_ready)
     .join("text")
-    .text((d) => d.data.label)
+    .text((d) => d.data.label + " (" + d.data.value + "t)")
     .attr("transform", function (d) {
       const pos = outerArc.centroid(d);
       const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
@@ -84,4 +85,21 @@ d3.json("/data/view1.json").then(function (data) {
       const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
       return midangle < Math.PI ? "start" : "end";
     });
+
+  d3.select("#interact-h2").text("Welt");
+
+  function mouseOverFunction(d) {
+    d3.select("#interact-h2").text(d.target.__data__.data.label);
+    d3.select("#interact-total").text(d.target.__data__.data.value + "t");
+
+    d3.select("#interact-kg").text(d.target.__data__.data.kg + "t");
+    d3.select("#interact-sum").text(
+      d.target.__data__.data.kg * d.target.__data__.data.value + "kg"
+    );
+
+    d3.select("#food_sector").text(
+      d.target.__data__.data.kg * d.target.__data__.data.value +
+        " Tonnen co2 Emmissionen von 9,0656 Billionen Tonnen co2"
+    );
+  }
 });

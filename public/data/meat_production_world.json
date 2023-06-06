@@ -1,0 +1,22 @@
+[
+    {
+        "label": "Schafsfleisch",
+        "value": 16357614,
+        "kg": 39.321269406
+    },
+    {
+        "label": "Rindfleisch",
+        "value": 76768270,
+        "kg": 99.865404814
+    },
+    {
+        "label": "Schweinefleisch",
+        "value": 120372130,
+        "kg": 12.325681779
+    },
+    {
+        "label": "Geflügelfleisch",
+        "value": 137979970,
+        "kg": 9.86582263
+    }
+]
