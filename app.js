@@ -15,24 +15,24 @@ app.get("/", (req, res) => {
   res.sendFile("/views/index.html", { root: __dirname });
 });
 
-app.get("/co2_sektor", (req, res) => {
+app.get("/1", (req, res) => {
   //send vies first.html file
-  res.sendFile("/views/co2_sektor.html", { root: __dirname });
+  res.sendFile("/views/1.html", { root: __dirname });
 });
 
-app.get("/co2_product", (req, res) => {
+app.get("/2", (req, res) => {
   //send vies first.html file
-  res.sendFile("/views/co2_product.html", { root: __dirname });
+  res.sendFile("/views/2.html", { root: __dirname });
 });
 
-app.get("/produce_meat", (req, res) => {
+app.get("/3", (req, res) => {
   //send vies first.html file
-  res.sendFile("/views/produce_meat.html", { root: __dirname });
+  res.sendFile("/views/3.html", { root: __dirname });
 });
 
-app.get("/total_meat", (req, res) => {
+app.get("/4", (req, res) => {
   //send vies first.html file
-  res.sendFile("/views/total_meat.html", { root: __dirname });
+  res.sendFile("/views/4.html", { root: __dirname });
 });
 
 // Start the server on port 3000

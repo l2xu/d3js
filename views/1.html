@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <script src="/javascript/d3.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
 
 
     <link rel="stylesheet" href="/css/reset.css">
@@ -27,24 +27,17 @@
     <main>
         <h1>Globale Co2 Emissionen nach Sektor im Jahr 2014</h1>
         <div class="two_col">
-            <div id="d3"></div>
+            <svg id="sankeyDiagram" width="1500" height="800"></svg>
 
-            <div id="interact">
-                <div id="total"></div>
-                <div id="showvalue">
+            <div id="showvalue">
 
-
-                </div>
-                <div id="legend">
-
-                </div>
 
             </div>
         </div>
 
 
     </main>
-    <script src="/javascript/product.js"></script>
+    <script src="/javascript/1.js"></script>
 </body>
 
 </html>

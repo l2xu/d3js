@@ -61,8 +61,18 @@ body {
   justify-content: space-between;
 }
 
-.outline {
+#outline {
   border: 1px solid darkgray;
   padding: 10px 20px;
   border-radius: 10px;
+}
+
+#name,
+#total {
+  text-align: center;
+}
+
+.hovered {
+  transform: scale(1.1); /* Example animation property */
+  transition: transform 0.2s ease; /* Example animation property */
 }

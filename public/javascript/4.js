@@ -1,4 +1,11 @@
 // The svg
+function formatNumber(number) {
+  return number.toLocaleString("de-DE", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
 const svg = d3.select("svg"),
   width = +svg.attr("width"),
   height = +svg.attr("height");
@@ -38,8 +45,8 @@ function update(secrent) {
 
   // Load external data and boot
   Promise.all([
-    d3.json("/data/geojson.geojson"),
-    d3.csv("/data/meat_production_world2.csv", function (d) {
+    d3.json("/data/world.geojson"),
+    d3.csv("/data/meat_production_world.csv", function (d) {
       if (d.Year === "2021") {
         data.set(d.Code, +d[secrent]);
         if (d.Code === "OWID_WRL") {
@@ -51,7 +58,10 @@ function update(secrent) {
     let topo = loadData[0];
 
     d3.select("#interact").append("text").text("Welt").attr("id", "country");
-    d3.select("#interact").append("text").text(total).attr("id", "total");
+    d3.select("#interact")
+      .append("text")
+      .text(formatNumber(total))
+      .attr("id", "total");
 
     let mouseOver = function (d) {
       d3.selectAll(".Country").transition().duration(200).style("opacity", 0.5);
@@ -62,13 +72,15 @@ function update(secrent) {
         .style("stroke", strokecolor);
 
       d3.select("#country").text(d.target.__data__.properties.name);
-      d3.select("#total").text(d.target.__data__.total).attr("id", "total");
+      d3.select("#total")
+        .text(formatNumber(d.target.__data__.total))
+        .attr("id", "total");
     };
 
     let mouseLeave = function (d) {
       d3.selectAll(".Country").transition().duration(200).style("opacity", 0.8);
       d3.select(this).transition().duration(200).style("stroke", "transparent");
-      d3.select("#total").text(total);
+      d3.select("#total").text(formatNumber(total));
       d3.select("#country").text("Welt");
     };
 

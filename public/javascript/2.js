@@ -1,3 +1,14 @@
+function formatNumber(number) {
+  return number.toLocaleString("de-DE", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+console.log("====================================");
+console.log(formatNumber(99.21383123));
+console.log("====================================");
+
 const margin = { top: 20, right: 30, bottom: 40, left: 90 },
   width = 1500 - margin.left - margin.right,
   height = 800 - margin.top - margin.bottom;
@@ -72,7 +83,7 @@ d3.csv("/data/food_products.csv").then(function (data) {
 
     const margin = { top: 20, right: 20, bottom: 30, left: 40 };
     const width = 400 - margin.left - margin.right;
-    const height = 700 - margin.top - margin.bottom;
+    const height = 600 - margin.top - margin.bottom;
 
     // Create the SVG container
     const stackedSvg = d3
@@ -140,32 +151,6 @@ d3.csv("/data/food_products.csv").then(function (data) {
       .duration(1000) // set the duration of the animation in milliseconds
       .attr("height", (d) => y(d[0]) - y(d[1]));
 
-    // Add a legend for the color scale
-    // const legend = stackedSvg
-    //   .append("g")
-    //   .attr("class", "legend")
-    //   .attr("transform", "translate(" + (width - 100) + ", 200)");
-
-    // const legendKeys = legend
-    //   .selectAll(".legend-key")
-    //   .data(keys)
-    //   .enter()
-    //   .append("g")
-    //   .attr("class", "legend-key")
-    //   .attr("transform", (d, i) => "translate(0," + i * 20 + ")");
-
-    // legendKeys
-    //   .append("rect")
-    //   .attr("width", 15)
-    //   .attr("height", 15)
-    //   .attr("fill", (d, i) => colorScale(i));
-
-    // legendKeys
-    //   .append("text")
-    //   .attr("x", 20)
-    //   .attr("y", 12)
-    //   .text((d) => d);
-
     // Append the axes to the chart
     stackedSvg
       .append("g")
@@ -175,13 +160,47 @@ d3.csv("/data/food_products.csv").then(function (data) {
 
     stackedSvg.append("g").attr("class", "y-axis").call(yAxis);
 
-    console.log(d);
+    //trun d.target.__data__.total into a number
+    const formatNumber = d3.format(".2f");
 
-    d3.select("#total").text(d.target.__data__.total + "co2 emissions / kg");
+    d3.select("#total").text(
+      formatNumber(d.target.__data__.total) + " CO2 Emissionen / kg"
+    );
+
+    d3.select("#name").text(d.target.__data__.Entity);
+
+    const legendSvg = d3
+      .select("#legend")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", keys.length * 20);
+
+    const legendItems = legendSvg
+      .selectAll("legendItem")
+      .data(keys)
+      .enter()
+      .append("g")
+      .attr("class", "legendItem")
+      .attr("transform", (d, i) => `translate(160, ${i * 20})`);
+
+    legendItems
+      .append("rect")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("width", 12)
+      .attr("height", 12)
+      .attr("fill", (d, i) => colorScale(i)); // Use the same color scale as in the stacked bars
+
+    legendItems
+      .append("text")
+      .attr("x", 20)
+      .attr("y", 10)
+      .text((d) => d);
   }
   function handleMouseOut(d) {
     // Remove the entire bar group element
     d3.select("#stacked-svg").remove();
     d3.select("#total").text("");
+    d3.select("#legend").text("");
   }
 });
