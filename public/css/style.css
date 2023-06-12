@@ -76,3 +76,20 @@ body {
   transform: scale(1.1); /* Example animation property */
   transition: transform 0.2s ease; /* Example animation property */
 }
+
+#co2_stats {
+  text-align: end;
+  font-size: 16px;
+}
+
+#meat_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-weight: bold;
+}

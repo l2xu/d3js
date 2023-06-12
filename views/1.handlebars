@@ -1,16 +1,23 @@
- <main>
-        <h1>Globale Co2 Emissionen nach Sektor im Jahr 2014</h1>
-        <div class="two_col">
-            <svg id="sankeyDiagram" width="1500" height="800"></svg>
+<main>
+  <div class="two_col">
+    <div>
+        <h2>Co2 Emissionen in Tonnen (Global)</h2>
+        <div id="co2_stats"></div>
+        <div id="co2"> </div>
+    </div>
+    <div>
+        <h2>Fleischproduktion in Tonnen (Global)</h2>
 
-            <div id="showvalue">
-
-
-            </div>
+        <div id="meat_header">
+        <select id="selectButton"></select>
+        <div id="meat_stats"></div>
         </div>
+     
+      <div id="meat"></div>
+    </div>
 
+  </div>
 
-    </main>
-    <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+</main>
 
-    <script src="/javascript/1.js"></script>
+<script src="/javascript/1.js"></script>

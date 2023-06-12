@@ -147,7 +147,7 @@ d3.json("/data/meat_production_world.json").then(function (data) {
     );
     const foodSector =
       ((d.target.__data__.data.kg * d.target.__data__.data.value) /
-        52300000000) *
+        41639840000) *
       100;
     d3.select("#food_sector").text(formatNumber(foodSector) + "%");
   }
