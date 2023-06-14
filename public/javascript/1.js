@@ -4,7 +4,7 @@ function formatNumber(number) {
     maximumFractionDigits: 2,
   });
 }
-
+let selectedOption = "Lamm"; // Declare the global variable
 // set the dimensions and margins of the graph
 const margin = { top: 50, right: 10, bottom: 30, left: 80 },
   width = 900 - margin.left - margin.right,
@@ -113,7 +113,7 @@ d3.csv("/data/global-co2-fossil-plus-land-use.csv", (d) => {
       .style("opacity", 1);
 
     d3.select("#co2_stats").text(
-      `Year: ${hoveredYear} | Value: ${formatNumber(hoveredValue)}`
+      `Year: ${hoveredYear} | Value: ${formatNumber(hoveredValue)}t`
     );
   }
 
@@ -142,20 +142,20 @@ const meatSVG = d3
 d3.csv("/data/meat_world.csv").then(function (data) {
   // Convert numerical values to numbers
   data.forEach(function (d) {
-    d.Year = +d.Year;
-    d.SheepAndGoat = +d.SheepAndGoat;
-    d.BeefAndBuffalo = +d.BeefAndBuffalo;
-    d.Pig = +d.Pig;
-    d.Poultry = +d.Poultry;
+    d.Jahr = +d.Jahr;
+    d.Lamm = +d.Lamm;
+    d.Rind = +d.Rind;
+    d.Schwein = +d.Schwein;
+    d.Geflügel = +d.Geflügel;
     d.Total = +d.Total;
   });
 
   // List of groups (here I have one group per column)
   const allGroup = [
-    "SheepAndGoat",
-    "BeefAndBuffalo",
-    "Pig",
-    "Poultry",
+    "Lamm",
+    "Rind",
+    "Schwein",
+    "Geflügel",
     // "Total",
   ];
 
@@ -176,7 +176,7 @@ d3.csv("/data/meat_world.csv").then(function (data) {
   const myColor = d3.scaleOrdinal().domain(allGroup).range(d3.schemeSet2);
 
   // Add X axis --> it is a date format
-  const x = d3.scaleLinear().domain([1961, 2023]).range([0, width]);
+  const x = d3.scaleLinear().domain([1961, 2021]).range([0, width]);
   const xAxis = d3.axisBottom(x).tickFormat(d3.format("d"));
 
   meatSVG.append("g").attr("transform", `translate(0, ${height})`).call(xAxis);
@@ -198,11 +198,11 @@ d3.csv("/data/meat_world.csv").then(function (data) {
           return x(d.Year);
         })
         .y(function (d) {
-          return y(d.SheepAndGoat);
+          return y(0);
         })
     )
     .attr("stroke", function () {
-      return myColor("SheepAndGoat");
+      return myColor("Lamm");
     })
     .style("stroke-width", 3)
     .style("fill", "none");
@@ -240,11 +240,17 @@ d3.csv("/data/meat_world.csv").then(function (data) {
   function handleMouseMove(event) {
     const xPos = d3.pointer(event)[0];
     const year = Math.round(x.invert(xPos));
-    const value = Math.round(y.invert(d3.pointer(event)[1]));
+
+    const bisect = d3.bisector(function (d) {
+      return d.Year;
+    }).left;
+    const index = bisect(data, year);
+    const d = data[index];
+    const value = d[selectedOption]; // Use the updated selectedOption variable
 
     verticalLine.attr("x1", xPos).attr("x2", xPos);
     d3.select("#meat_stats").text(
-      `Year: ${year} | Value: ${formatNumber(value)}`
+      `Jahr: ${year} | Wert: ${formatNumber(value)}t`
     );
   }
 
@@ -276,11 +282,10 @@ d3.csv("/data/meat_world.csv").then(function (data) {
       });
   }
 
-  // When the button is changed, run the updateChart function
   d3.select("#selectButton").on("change", function () {
-    // recover the option that has been chosen
-    const selectedOption = d3.select(this).property("value");
-    // run the updateChart function with this selected option
+    selectedOption = d3.select(this).property("value");
     update(selectedOption);
   });
+
+  update("Lamm");
 });

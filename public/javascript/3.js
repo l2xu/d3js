@@ -60,6 +60,7 @@ d3.json("/data/meat_production_world.json").then(function (data) {
     .on("mouseover", mouseOverFunction)
     .on("mouseout", function () {
       d3.select(this).classed("hovered", false);
+      getWorldData();
     });
 
   svg
@@ -105,7 +106,8 @@ d3.json("/data/meat_production_world.json").then(function (data) {
     .selectAll("allLabels")
     .data(data_ready)
     .join("text")
-    .text((d) => d.data.label + " (" + d.data.value + "t)")
+    .text((d) => d.data.label + " (" + formatNumber(d.data.value) + "t)")
+
     .attr("transform", function (d) {
       const pos = outerArc.centroid(d);
       const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
@@ -116,7 +118,8 @@ d3.json("/data/meat_production_world.json").then(function (data) {
       const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
       return midangle < Math.PI ? "start" : "end";
     })
-    .style("opacity", 0); // Set initial opacity to 0
+    .style("opacity", 0) // Set initial opacity to 0
+    .style("font-size", 15);
 
   svg
     .selectAll("text")
@@ -150,5 +153,27 @@ d3.json("/data/meat_production_world.json").then(function (data) {
         41639840000) *
       100;
     d3.select("#food_sector").text(formatNumber(foodSector) + "%");
+  }
+
+  getWorldData();
+
+  function getWorldData() {
+    d3.select("#interact-h2").text("Welt");
+
+    let total = 0;
+    data.forEach((d) => {
+      total += d.value;
+    });
+    d3.select("#interact-total").text(formatNumber(total) + "t");
+
+    let emission = 0;
+    data.forEach((d) => {
+      emission += d.kg * d.value;
+    });
+    d3.select("#interact-sum").text(formatNumber(emission) + "t");
+
+    d3.select("#food_sector").text(
+      formatNumber((emission / 41639840000) * 100) + "%"
+    );
   }
 });

@@ -47,7 +47,7 @@ function update(secrent) {
   Promise.all([
     d3.json("/data/world.geojson"),
     d3.csv("/data/meat_production_world.csv", function (d) {
-      if (d.Year === "2021") {
+      if (d.Year === "2018") {
         data.set(d.Code, +d[secrent]);
         if (d.Code === "OWID_WRL") {
           total = +d[secrent];

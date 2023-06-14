@@ -5,10 +5,6 @@ function formatNumber(number) {
   });
 }
 
-console.log("====================================");
-console.log(formatNumber(99.21383123));
-console.log("====================================");
-
 const margin = { top: 20, right: 30, bottom: 40, left: 90 },
   width = 1500 - margin.left - margin.right,
   height = 800 - margin.top - margin.bottom;
@@ -30,7 +26,7 @@ d3.csv("/data/food_products.csv").then(function (data) {
     return a.total - b.total;
   });
 
-  data = data.slice(0, 25);
+  data = data.slice(0, 23);
 
   // Add X axis
   const x = d3.scaleLinear().domain([0, 100]).range([0, width]);
@@ -202,5 +198,6 @@ d3.csv("/data/food_products.csv").then(function (data) {
     d3.select("#stacked-svg").remove();
     d3.select("#total").text("");
     d3.select("#legend").text("");
+    d3.select("#name").text("");
   }
 });
