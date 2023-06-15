@@ -1,13 +1,6 @@
-function formatNumber(number) {
-  return number.toLocaleString("de-DE", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-}
-
-const margin = { top: 20, right: 30, bottom: 40, left: 90 },
-  width = 1500 - margin.left - margin.right,
-  height = 800 - margin.top - margin.bottom;
+const margin = { top: 20, right: 30, bottom: 50, left: 100 };
+const width = 1500 - margin.left - margin.right;
+const height = 800 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 const svg = d3

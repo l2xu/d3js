@@ -1,17 +1,16 @@
-function formatNumber(number) {
-  return number.toLocaleString("de-DE", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-}
-let selectedOption = "Lamm"; // Declare the global variable
-// set the dimensions and margins of the graph
-const margin = { top: 50, right: 10, bottom: 30, left: 80 },
-  width = 900 - margin.left - margin.right,
-  height = 800 - margin.top - margin.bottom;
+/**
+ * Renders a line chart displaying global CO2 emissions over time.
+ * Fetches data from a CSV file and adds mouse interaction functionality.
+ */
+import { formatNumber } from "./util.js";
 
-// append the svg object to the body of the page
-const svg = d3
+// Margins and dimensions for the chart
+const margin = { top: 50, right: 10, bottom: 30, left: 80 };
+const width = 900 - margin.left - margin.right;
+const height = 800 - margin.top - margin.bottom;
+
+// Selecting the SVG element for the CO2 chart
+const svgCO2 = d3
   .select("#co2")
   .append("svg")
   .attr("width", width + margin.left + margin.right)
@@ -19,62 +18,60 @@ const svg = d3
   .append("g")
   .attr("transform", `translate(${margin.left},${margin.top})`);
 
-// Read the data
-d3.csv("/data/global-co2-fossil-plus-land-use.csv", (d) => {
-  if (d.Entity === "World") {
-    return {
+// Fetching CO2 data from a CSV file
+d3.csv("/data/global-co2-fossil-plus-land-use.csv").then(function (data) {
+  // Filtering the data for the "World" entity and parsing date and value fields
+  const filteredData = data
+    .filter((d) => d.Entity === "World")
+    .map((d) => ({
       date: new Date(d.Year),
       value: +d.Annual,
-    };
-  }
-}).then(function (data) {
-  // Add X axis --> it is a date format
+    }));
+
+  // Setting up the x-axis scale and axis
   const x = d3
     .scaleTime()
-    .domain(d3.extent(data, (d) => d.date))
+    .domain(d3.extent(filteredData, (d) => d.date))
     .range([0, width]);
-  svg
+  svgCO2
     .append("g")
     .attr("transform", `translate(0,${height})`)
     .call(d3.axisBottom(x));
 
-  // Add Y axis
+  // Setting up the y-axis scale and axis
   const y = d3
     .scaleLinear()
-    .domain([0, d3.max(data, (d) => d.value) * 1.1])
+    .domain([0, d3.max(filteredData, (d) => d.value * 1.1)])
     .range([height, 0]);
-  svg.append("g").call(d3.axisLeft(y));
+  svgCO2.append("g").call(d3.axisLeft(y));
 
-  // Define the line function
+  // Creating the line function
   const line = d3
     .line()
     .x((d) => x(d.date))
-    .y((d) => y(0));
+    .y((d) => y(d.value));
 
-  // Add the line path
-  const linePath = svg
+  // Adding the line path to the chart
+  const linePath = svgCO2
     .append("path")
-    .datum(data)
+    .datum(filteredData)
     .attr("fill", "none")
     .attr("stroke", "#69b3a2")
     .attr("stroke-width", 3)
     .attr("d", line)
-    .on("mousemove", handleMouseMove) // Add mousemove event handler
-    .on("mouseout", handleMouseOut); // Add mouseout event handler
+    .on("mousemove", handleMouseMove)
+    .on("mouseout", handleMouseOut);
 
-  // Transition the line path to the actual values
+  // Animating the line path
   linePath
+    .attr("stroke-dasharray", linePath.node().getTotalLength())
+    .attr("stroke-dashoffset", linePath.node().getTotalLength())
     .transition()
     .duration(2000)
-    .attr(
-      "d",
-      d3
-        .line()
-        .x((d) => x(d.date))
-        .y((d) => y(d.value))
-    );
+    .attr("stroke-dashoffset", 0);
 
-  const verticalLine = svg
+  // Adding a vertical line for mouse interaction
+  const verticalLine = svgCO2
     .append("line")
     .attr("class", "vertical-line")
     .attr("y1", 0)
@@ -83,54 +80,70 @@ d3.csv("/data/global-co2-fossil-plus-land-use.csv", (d) => {
     .attr("stroke-width", 1)
     .style("opacity", 0);
 
-  svg
+  // Adding an overlay rectangle for mouse interaction
+  svgCO2
     .append("rect")
     .attr("class", "overlay")
     .attr("width", width)
     .attr("height", height)
     .style("opacity", 0)
-    .on("mousemove", handleMouseMove) // Add mousemove event handler
-    .on("mouseout", handleMouseOut); // Add mouseout event handler
+    .on("mousemove", handleMouseMove)
+    .on("mouseout", handleMouseOut);
 
+  /**
+   * Handles the mousemove event on the chart.
+   * Displays a vertical line and information about the hovered data point.
+   * @param {MouseEvent} event - The mousemove event object.
+   */
   function handleMouseMove(event) {
-    // Calculate the corresponding date and value based on the mouse position
+    // Get the x-coordinate of the mouse pointer
     const mouseX = d3.pointer(event)[0];
+
+    // Convert the x-coordinate to a date value
     const date = x.invert(mouseX);
+
+    // Find the nearest data point to the hovered date
     const bisectDate = d3.bisector((d) => d.date).left;
-    const index = bisectDate(data, date, 1);
-    const d0 = data[index - 1];
-    const d1 = data[index];
+    const index = bisectDate(filteredData, date, 1);
+    const d0 = filteredData[index - 1];
+    const d1 = filteredData[index];
     const hoveredData = date - d0.date > d1.date - date ? d1 : d0;
 
-    // Update the hovered year and value
-    hoveredYear = hoveredData.date.getFullYear();
-    hoveredValue = hoveredData.value;
+    // Extract the year and value of the hovered data point
+    const hoveredYear = hoveredData.date.getFullYear();
+    const hoveredValue = hoveredData.value;
 
-    // Update the position and visibility of the vertical line
+    // Update the vertical line position and opacity
     verticalLine
       .attr("x1", x(hoveredData.date))
       .attr("x2", x(hoveredData.date))
       .style("opacity", 1);
 
+    // Display the year and value of the hovered data point
     d3.select("#co2_stats").text(
       `Year: ${hoveredYear} | Value: ${formatNumber(hoveredValue)}t`
     );
   }
 
-  // Function to handle mouseout event
+  /**
+   * Handles the mouseout event on the chart.
+   * Hides the vertical line.
+   */
   function handleMouseOut() {
-    // Clear the hovered year and value
-    hoveredYear = null;
-    hoveredValue = null;
-
-    // Hide the vertical line
     verticalLine.style("opacity", 0);
   }
 });
 
-// Second graph
-// append the svg object to the body of the page
-const meatSVG = d3
+/**
+ * Renders a line chart displaying meat consumption over time.
+ * Fetches data from a CSV file and adds mouse interaction functionality.
+ */
+
+// Declare the global variable to store the selected option
+let selectedOption = "Lamm";
+
+// Selecting the SVG element for the meat chart
+const svgMeat = d3
   .select("#meat")
   .append("svg")
   .attr("width", width + margin.left + margin.right)
@@ -138,9 +151,9 @@ const meatSVG = d3
   .append("g")
   .attr("transform", `translate(${margin.left},${margin.top})`);
 
-// Read the data
+// Fetching meat consumption data from a CSV file
 d3.csv("/data/meat_world.csv").then(function (data) {
-  // Convert numerical values to numbers
+  // Parsing the data values as numbers
   data.forEach(function (d) {
     d.Jahr = +d.Jahr;
     d.Lamm = +d.Lamm;
@@ -150,16 +163,10 @@ d3.csv("/data/meat_world.csv").then(function (data) {
     d.Total = +d.Total;
   });
 
-  // List of groups (here I have one group per column)
-  const allGroup = [
-    "Lamm",
-    "Rind",
-    "Schwein",
-    "Geflügel",
-    // "Total",
-  ];
+  // Creating an array of all meat group options
+  const allGroup = ["Lamm", "Rind", "Schwein", "Geflügel"];
 
-  // add the options to the button
+  // Adding options to the select button
   d3.select("#selectButton")
     .selectAll("myOptions")
     .data(allGroup)
@@ -167,26 +174,25 @@ d3.csv("/data/meat_world.csv").then(function (data) {
     .append("option")
     .text(function (d) {
       return d;
-    }) // text showed in the menu
+    })
     .attr("value", function (d) {
       return d;
-    }); // corresponding value returned by the button
+    });
 
-  // A color scale: one color for each group
+  // Setting up the color scale for different meat groups
   const myColor = d3.scaleOrdinal().domain(allGroup).range(d3.schemeSet2);
 
-  // Add X axis --> it is a date format
+  // Setting up the x-axis scale and axis
   const x = d3.scaleLinear().domain([1961, 2021]).range([0, width]);
   const xAxis = d3.axisBottom(x).tickFormat(d3.format("d"));
+  svgMeat.append("g").attr("transform", `translate(0, ${height})`).call(xAxis);
 
-  meatSVG.append("g").attr("transform", `translate(0, ${height})`).call(xAxis);
-
-  // Add Y axis
+  // Setting up the y-axis scale and axis
   const y = d3.scaleLinear().domain([0, 147979970]).range([height, 0]);
-  meatSVG.append("g").call(d3.axisLeft(y));
+  svgMeat.append("g").call(d3.axisLeft(y));
 
-  // Initialize line with group a
-  const line = meatSVG
+  // Creating an initial line path with zero values
+  const line = svgMeat
     .append("g")
     .append("path")
     .datum(data)
@@ -207,7 +213,8 @@ d3.csv("/data/meat_world.csv").then(function (data) {
     .style("stroke-width", 3)
     .style("fill", "none");
 
-  const verticalLine = meatSVG
+  // Adding a vertical line for mouse interaction
+  const verticalLine = svgMeat
     .append("line")
     .attr("class", "vertical-line")
     .attr("y1", 0)
@@ -216,8 +223,8 @@ d3.csv("/data/meat_world.csv").then(function (data) {
     .attr("stroke-width", 1)
     .style("opacity", 0);
 
-  // Add the hover effect
-  meatSVG
+  // Adding an overlay rectangle for mouse interaction
+  svgMeat
     .append("rect")
     .attr("class", "overlay")
     .attr("width", width)
@@ -228,15 +235,27 @@ d3.csv("/data/meat_world.csv").then(function (data) {
     .on("mouseout", handleMouseOut)
     .on("mousemove", handleMouseMove);
 
+  /**
+   * Handles the mouseover event on the chart.
+   * Shows the vertical line.
+   */
   function handleMouseOver() {
     verticalLine.style("opacity", 1);
   }
 
+  /**
+   * Handles the mouseout event on the chart.
+   * Hides the vertical line.
+   */
   function handleMouseOut() {
     verticalLine.style("opacity", 0);
-    // d3.select("#meat_stats").html("");
   }
 
+  /**
+   * Handles the mousemove event on the chart.
+   * Displays the value for the selected year and meat group.
+   * @param {MouseEvent} event - The mousemove event object.
+   */
   function handleMouseMove(event) {
     const xPos = d3.pointer(event)[0];
     const year = Math.round(x.invert(xPos));
@@ -246,7 +265,7 @@ d3.csv("/data/meat_world.csv").then(function (data) {
     }).left;
     const index = bisect(data, year);
     const d = data[index];
-    const value = d[selectedOption]; // Use the updated selectedOption variable
+    const value = d[selectedOption];
 
     verticalLine.attr("x1", xPos).attr("x2", xPos);
     d3.select("#meat_stats").text(
@@ -254,14 +273,15 @@ d3.csv("/data/meat_world.csv").then(function (data) {
     );
   }
 
-  // A function that updates the chart
+  /**
+   * Updates the line chart with the selected meat group.
+   * @param {string} selectedGroup - The selected meat group.
+   */
   function update(selectedGroup) {
-    // Create new data with the selection
     const dataFilter = data.map(function (d) {
       return { Year: d.Year, value: d[selectedGroup] };
     });
 
-    // Give this new data to update the line
     line
       .datum(dataFilter)
       .transition()
@@ -282,10 +302,14 @@ d3.csv("/data/meat_world.csv").then(function (data) {
       });
   }
 
+  // Event listener for the select button
   d3.select("#selectButton").on("change", function () {
+    // Update the selected option
     selectedOption = d3.select(this).property("value");
+    // Update the line chart with the selected option
     update(selectedOption);
   });
 
+  // Update the line chart with the initial selected option
   update("Lamm");
 });

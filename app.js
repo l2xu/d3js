@@ -1,19 +1,24 @@
+// Import required modules
 const handlebars = require("express-handlebars");
 const express = require("express");
 
+// Create an instance of Express
 const app = express();
-var path = require("path");
+const path = require("path");
 
+// Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, "public")));
 
+// Configure Handlebars as the view engine
 app.set("view engine", "handlebars");
 app.engine(
   "handlebars",
   handlebars.engine({
-    layoutsDir: __dirname + "/views/layouts",
+    layoutsDir: path.join(__dirname, "/views/layouts"),
   })
 );
 
+// Define routes and render corresponding views
 app.get("/", (req, res) => {
   res.render("index", { layout: "main" });
 });
@@ -38,6 +43,7 @@ app.get("/outro", (req, res) => {
   res.render("outro", { layout: "main" });
 });
 
+// Start the server and listen on port 3000
 app.listen(3000, () => {
   console.log("Server started on http://localhost:3000");
 });
