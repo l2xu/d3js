@@ -20,6 +20,7 @@ d3.csv("/data/food_products.csv").then(function (data) {
   });
 
   data = data.slice(0, 23);
+  //...
 
   // Add X axis
   const x = d3.scaleLinear().domain([0, 100]).range([0, width]);
@@ -149,7 +150,6 @@ d3.csv("/data/food_products.csv").then(function (data) {
 
     stackedSvg.append("g").attr("class", "y-axis").call(yAxis);
 
-    //trun d.target.__data__.total into a number
     const formatNumber = d3.format(".2f");
 
     d3.select("#total").text(

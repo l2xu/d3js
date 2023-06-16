@@ -224,6 +224,7 @@ d3.csv("/data/meat_world.csv").then(function (data) {
     .style("opacity", 0);
 
   // Adding an overlay rectangle for mouse interaction
+  // Adding mouse interaction functionality
   svgMeat
     .append("rect")
     .attr("class", "overlay")
