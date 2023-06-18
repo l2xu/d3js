@@ -129,7 +129,7 @@ d3.json("/data/meat_production_world.json").then(function (data) {
     .delay((_, i) => i * 100) // Add a delay for each label to create a staggered effect
     .style("opacity", 1); // Animate the opacity to make the labels visible
 
-  d3.select("#interact-h2").text("Welt"); // Set the initial text
+  d3.select("#interact-h2").text("Alle 4 Fleischsorten"); // Set the initial text
 
   /**
    * Event handler for mouseover event on pie slices.
@@ -171,7 +171,7 @@ d3.json("/data/meat_production_world.json").then(function (data) {
    * Calculates and shows the total meat production and emissions.
    */
   function getWorldData() {
-    d3.select("#interact-h2").text("Welt");
+    d3.select("#interact-h2").text("Alle 4 Fleischsorten");
 
     let total = 0;
     data.forEach((d) => {
@@ -188,5 +188,7 @@ d3.json("/data/meat_production_world.json").then(function (data) {
     d3.select("#food_sector").text(
       formatNumber((emission / 41639840000) * 100) + "%"
     );
+
+    d3.select("#interact-kg").text("");
   }
 });

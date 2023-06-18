@@ -102,7 +102,7 @@ body {
 h2 {
   margin-bottom: 20px;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 #food_sector,
@@ -120,9 +120,16 @@ p {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 900px;
+  margin-top: 50px;
 }
 
 .intro_text {
   line-height: 1.3;
   margin-top: 36px;
+}
+
+#bottom_bg {
+  position: absolute;
+  bottom: 0;
 }

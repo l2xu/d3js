@@ -66,7 +66,7 @@ d3.csv("/data/food_products.csv").then(function (data) {
     .attr("text-anchor", "end")
     .attr("x", width)
     .attr("y", height + margin.top + 20)
-    .text("CO2 Emissions / kg");
+    .text("CO2 Emissions / Tonne");
 
   function handleMouseOver(d) {
     const data = d.target.__data__;
@@ -153,7 +153,7 @@ d3.csv("/data/food_products.csv").then(function (data) {
     const formatNumber = d3.format(".2f");
 
     d3.select("#total").text(
-      formatNumber(d.target.__data__.total) + " CO2 Emissionen / kg"
+      formatNumber(d.target.__data__.total) + " Tonnen Co2 Emissionen"
     );
 
     d3.select("#name").text(d.target.__data__.Entity);

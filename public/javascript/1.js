@@ -183,7 +183,7 @@ d3.csv("/data/meat_world.csv").then(function (data) {
   const myColor = d3.scaleOrdinal().domain(allGroup).range(d3.schemeSet2);
 
   // Setting up the x-axis scale and axis
-  const x = d3.scaleLinear().domain([1961, 2021]).range([0, width]);
+  const x = d3.scaleLinear().domain([1961, 2018]).range([0, width]);
   const xAxis = d3.axisBottom(x).tickFormat(d3.format("d"));
   svgMeat.append("g").attr("transform", `translate(0, ${height})`).call(xAxis);
 
