@@ -33,7 +33,7 @@ d3.json("/data/meat_production_world.json").then(function (data) {
   const pie = d3
     .pie()
     .sort(null) // Do not sort the groups by size
-    .value((d) => d.value);
+    .value((d) => d.global_share);
   const data_ready = pie(data);
 
   // Set up an arc generator for the pie slices
@@ -107,7 +107,9 @@ d3.json("/data/meat_production_world.json").then(function (data) {
     .selectAll("allLabels")
     .data(data_ready)
     .join("text")
-    .text((d) => d.data.label + " (" + formatNumber(d.data.value) + "t)")
+    .text(
+      (d) => d.data.label + " (" + formatNumber(d.data.value * d.data.kg) + "t)"
+    )
 
     .attr("transform", function (d) {
       const pos = outerArc.centroid(d);

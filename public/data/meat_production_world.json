@@ -2,21 +2,25 @@
     {
         "label": "Lammfleisch",
         "value": 15526263,
-        "kg": 39.321269406
+        "kg": 39.321269406,
+        "global_share": 1.47
     },
     {
         "label": "Rindfleisch",
         "value": 74484904,
-        "kg": 99.865404814
+        "kg": 99.865404814,
+        "global_share": 17.86
     },
     {
         "label": "Schweinefleisch",
         "value": 119073656,
-        "kg": 12.325681779
+        "kg": 12.325681779,
+        "global_share": 3.52
     },
     {
         "label": "Geflügelfleisch",
         "value": 128275730,
-        "kg": 9.86582263
+        "kg": 9.86582263,
+        "global_share": 3.04
     }
 ]

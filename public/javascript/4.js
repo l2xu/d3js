@@ -1,4 +1,5 @@
-// The svg
+// Diese Visualisierung hat es auch zeitlichen Gründen leider nicht in die Präsentation geschafft.
+
 function formatNumber(number) {
   return number.toLocaleString("de-DE", {
     minimumFractionDigits: 2,
